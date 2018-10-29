@@ -1,0 +1,86 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>PS Bank account holders details</title>
+</head>
+<body>
+
+	<div class="container">
+		<%@ include file="header.jsp"%>
+		<div class="row">
+			<div class="col-12">
+			 <c:url value="/logout" var="logoutUrl"/>
+			 <form action="${logoutUrl}" method="post" id="logoutForm">
+			 <input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}">
+			 </form>
+			 <script>
+			  function formSubmit(){
+				  document.getElementById("logoutForm").submit();
+			  }
+			 </script>
+			 <p class="display-5">
+			  Welcome : ${username} , <a href="javascript:formSubmit()">Logout</a>
+			 </p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-12">
+			 <a href="<c:url value='/new'/>" class="btn btn-lg btn-primary">Add New Account</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12">
+
+
+				<table class="table table-bordered table-hover">
+					<thead class="bg-success">
+						<tr>
+							<th><spring:message code="lbl.accountnumber" /></th>
+							<th><spring:message code="lbl.holdername" /></th>
+							<th><spring:message code="lbl.balance" /></th>
+							<th>&nbsp;</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						<c:forEach var="account" items="${accounts}">
+							<c:url var="updateLink" value="/edit">
+								<c:param name="accountnumber" value="${account.accountnumber}" />
+							</c:url>
+
+							<c:url var="deleteLink" value="/delete">
+								<c:param name="accountnumber" value="${account.accountnumber}" />
+							</c:url>
+
+							<tr>
+								<td>${account.accountnumber}</td>
+								<td>${account.holdername}</td>
+								<td>${account.balance}</td>
+								<td><a href="${updateLink }" class="btn btn-warning">Edit</a></td>
+								<td><a href="${deleteLink }" class="btn btn-danger"
+									onclick="if(!(confirm('Are you sure to delete'))) return false">Delete</a></td>
+							</tr>
+						</c:forEach>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<%@ include file="footer.jsp"%>
+	</div>
+
+
+</body>
+</html>
